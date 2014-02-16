@@ -1,3 +1,11 @@
+#Hello!
+#This is my first python program
+#Feel free to use it however you like but I would appreciate hitting me up at alex.bartis@gmail.com 
+#when you use it in one of your cool projects
+#GPL V3 licence if it matter
+#have fun tracking the ISS
+
+
 import urllib, json, threading
 from pygeocoder import Geocoder
 
