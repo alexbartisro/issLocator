@@ -1,28 +1,45 @@
 
 import urllib, json, threading
+from geopy import geocoders
 
-from geopy.geocoders import GoogleV3
-geolocator = GoogleV3()
-
-url= "https://api.wheretheiss.at/v1/satellites/25544"
+geolocator =  geocoders.GoogleV3()
+url= "https://api.wheretheiss.at/v1/satellites/25544";
+latitude = 0;
+longitude = 0;
+address = "";
+lastKnownAddress = "";
+point = ""; 
 
 def work():
-        response = urllib.urlopen(url)
-        data = json.loads(response.read())
-        name = data['name']
-        latitude = data['latitude']
-        longitude = data['longitude']
-        threading.Timer(1, work).start();
-       	address = geolocator.reverse ("latitude, longitude")
+	global latitude; 
+	global longitude; 
+	global address; 
+	global lastKnownAddress; 
+	global point;
+        response = urllib.urlopen(url);
+        data = json.loads(response.read());
+        name = data['name'];
+        latitude = data['latitude'];
+        longitude = data['longitude'];
+       	strLong = '%.7f' % longitude;
+	strLat = '%.7f' % latitude;
+	point = strLat + ", " + strLong; 
+	threading.Timer(1, work).start();
+       	address = geolocator.reverse ("latitude", "longitude");
+	if address != None:
+		lastKnownAddress = address;
+	printCoordinates();	
+
+def printCoordinates():
+	print "Point is ", point;
 	print " ";
         print "The International Space Station's current coordinates are ";
         print "Latitude =",latitude," ","Longitude =",longitude;
-	if address == None:
-		print "Current coordinates do not match any known address"
-		#uncomment this if you want to print the address even if it is not found
-		#print address
-	else:
-		print "Current address is "
-		print " "
-		print address
+	if ( lastKnownAddress != None and lastKnownAddress !="" ):
+	#	print "Current address is ";
+	#	print address;
+		print "Last known Address is ";
+		print lastKnownAddress;
+		
+
 work();
