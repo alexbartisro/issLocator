@@ -25,11 +25,11 @@ def work():
         longitude = data['longitude'];        
 	try:
 		address =  Geocoder.reverse_geocode(latitude, longitude);
+		print address;
 	except:
 		pass;
 		print "Current location is unknown";
 	printCoordinates();	
-	print address;
 	threading.Timer(35, work).start();
 
 def printCoordinates():
