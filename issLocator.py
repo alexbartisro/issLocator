@@ -1,39 +1,27 @@
-#Hello!
-#This is my first python program
-#Feel free to use it however you like but I would appreciate hitting me up at alex.bartis@gmail.com 
-#when you use it in one of your cool projects
-#GPL V3 licence if it matter
-#have fun tracking the ISS
+"""
+ISS Locator by Trusk89:alex.bartis@gmail.com 
+Edited / Shortened / Made Worse by SgtBurned:SgtBurned@hotmail.co.uk
+"""
 
-
-import urllib, json, threading
+import urllib, json, time
 from pygeocoder import Geocoder
 
-url= "https://api.wheretheiss.at/v1/satellites/25544";
-latitude = 0;
-longitude = 0;
-address = "";
+url= "https://api.wheretheiss.at/v1/satellites/25544"
+lat = lon = addr = False
 
-def work():
-	global latitude; 
-	global longitude; 
-        global address;
-	print " ";
-	response = urllib.urlopen(url);
-        data = json.loads(response.read());
-        latitude = data['latitude'];
-        longitude = data['longitude'];        
+def Read():
+	response = urllib.urlopen(url)
+	data = json.loads(response.read())
+	lat = data['latitude']
+	lon = data['longitude']
 	try:
-		address =  Geocoder.reverse_geocode(latitude, longitude);
-		print address;
+		addr =  Geocoder.reverse_geocode(lat, lon)
 	except:
-		pass;
-		print "Current location is unknown";
-	printCoordinates();	
-	threading.Timer(35, work).start();
+		return False, False, False
+	return lat, lon, addr
 
-def printCoordinates():
-        print "The International Space Station's current coordinates are ";
-        print "Latitude =",latitude," ","Longitude =",longitude;
-
-work ();
+if __name__ == "__main__":
+	while 1:
+		lat, lon, addr = Read()
+		print "The ISS is located at:\nLat: {}\nLon: {}\nAddress: {}".format(lat, lon, addr)
+		time.sleep(15)
