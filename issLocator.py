@@ -7,7 +7,6 @@ import urllib, json, time
 from pygeocoder import Geocoder
 
 url= "https://api.wheretheiss.at/v1/satellites/25544"
-lat = lon = addr = False
 
 def Read():
 	response = urllib.urlopen(url)
